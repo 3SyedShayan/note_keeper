@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:note_keeper/screens/note_detail.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,6 +14,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return NoteDetail(noteDetailTitle: "Add Title");
+              },
+            ),
+          );
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Floating Action Button Pressed')),
           );
@@ -26,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
+              Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Add Note button pressed')),
               );
@@ -47,6 +57,14 @@ class _HomeScreenState extends State<HomeScreen> {
             title: Text('Note ${index + 1}'),
             subtitle: Text('This is the content of note ${index + 1}.'),
             onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const NoteDetail(noteDetailTitle: "Edit Title");
+                  },
+                ),
+              );
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Tapped on Note ${index + 1}')),
               );

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:note_keeper/widgets/buttons.dart';
 
 class NoteDetail extends StatefulWidget {
-  const NoteDetail({super.key});
+  const NoteDetail({super.key, required this.noteDetailTitle});
 
   @override
   State<NoteDetail> createState() => _NoteDetailState();
+  final String noteDetailTitle;
 }
 
 class _NoteDetailState extends State<NoteDetail> {
@@ -15,6 +17,18 @@ class _NoteDetailState extends State<NoteDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('Back button pressed')));
+          },
+        ),
+        title: Text(widget.noteDetailTitle),
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
 
@@ -53,19 +67,11 @@ class _NoteDetailState extends State<NoteDetail> {
             ),
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
-                onPressed: () {},
-                style: ButtonStyle(
-                  shape: WidgetStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(3),
-                    ),
-                  ),
-                ),
-                child: Text("Save"),
-              ),
-              // ElevatedButton(onPressed: () {}, ,child: Text("Delete")),
+              FormButton(title: "save", onPressed: () {}),
+              SizedBox(width: 10),
+              FormButton(title: "delete", onPressed: () {}),
             ],
           ),
         ],
