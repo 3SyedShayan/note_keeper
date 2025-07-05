@@ -80,4 +80,13 @@ class DatabaseHelper {
     print(result);
     return result;
   }
+
+  Future<int> getCount() async {
+    Database db = await database;
+    List<Map<String, dynamic>> x = await db.rawQuery(
+      'SELECT COUNT (*) from $noteTable',
+    );
+    int? result = Sqflite.firstIntValue(x);
+    return result ?? 0;
+  }
 }
