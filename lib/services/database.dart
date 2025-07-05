@@ -62,4 +62,14 @@ class DatabaseHelper {
     var result = await db.insert(noteTable, note.toMap());
     print('Inserted note with id: $result');
   }
+
+  void updateNote(Note note) async {
+    Database db = await database;
+    var result = await db.update(
+      noteTable,
+      note.toMap(),
+      where: '$colId = ?',
+      whereArgs: [note.id],
+    );
+  }
 }
