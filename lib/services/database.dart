@@ -1,31 +1,59 @@
+import 'package:note_keeper/models/note.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
 import 'package:path/path.dart';
 
-class DatabaseService {
-  static final DatabaseService instance = DatabaseService._constructor();
-  DatabaseService._constructor();
+class DatabaseHelper {
+  static DatabaseHelper _databaseHelper;
+  static Database _database;
 
-  Database? _database;
+  String noteTable = 'note_table';
+  String colId = 'id';
+  String colTitle = 'title';
+  String colDescription = 'description';
+  String colPriority = 'priority';
+  String colDate = 'date';
 
-
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-    _database = await getDatabase();
-    return _database!;
-
+  DatabaseHelper._createInstance();
+  factory DatabaseHelper() {
+    if (_databaseHelper == null) {
+      _databaseHelper = DatabaseHelper._createInstance();
+    }
+    return _databaseHelper;
   }
-  Future<Database> getDatabase() async {
-    final dbPath = await getDatabasesPath();
-    final fullPath = join(dbPath, 'notes.db');
-    final database = await openDatabase(
-      fullPath,
+  Future<Database> get database async {
+    if (database == null) {
+      _database = await _initalizeDatabase();
+    }
+    return _database;
+  }
+
+  Future<Database> _initalizeDatabase() async {
+    String dbPath = await getDatabasesPath();
+    String path = join(dbPath, 'notes.db');
+    var notesDatabase = await openDatabase(
+      path,
       version: 1,
-      onCreate:
-          (db, version) => db.execute(
-            'CREATE TABLE notes(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT)',
-          ),
+      onCreate: _onCreate,
     );
-  return database;
+    return notesDatabase;
+  }
+
+  void _onCreate(Database db, int version) {
+    db.execute('''
+      CREATE TABLE $noteTable (
+        $colId INTEGER PRIMARY KEY AUTOINCREMENT,
+        $colTitle TEXT,
+        $colDescription TEXT,
+        $colPriority INTEGER,
+        $colDate TEXT
+      )
+    ''');
+  }
+
+  Future<List<Map<String, dynamic>>> getNotes(int id) async {
+    Database db = await database;
+    var results = await db.query(noteTable, orderBy: '$colPriority ASC');
+    return results;
   }
 }
