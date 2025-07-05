@@ -56,4 +56,10 @@ class DatabaseHelper {
     var results = await db.query(noteTable, orderBy: '$colPriority ASC');
     return results;
   }
+
+  void insertNote(Note note) async {
+    Database db = await database;
+    var result = await db.insert(noteTable, note.toMap());
+    print('Inserted note with id: $result');
+  }
 }
