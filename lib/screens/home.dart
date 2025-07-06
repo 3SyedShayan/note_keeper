@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:note_keeper/models/note.dart';
 import 'package:note_keeper/screens/note_detail.dart';
+import 'package:note_keeper/services/database.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -9,6 +11,31 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  DatabaseHelper databaseHelper = DatabaseHelper();
+  List<Note>? notes;
+  Color getPriorityColor(int priority) {
+    switch (priority) {
+      case 1:
+        return Colors.red;
+      case 2:
+        return Colors.yellow;
+      case 3:
+      default:
+        return Colors.yellow;
+    }
+  }
+
+  Icon getPriorityIcon(int priority) {
+    switch (priority) {
+      case 1:
+        return Icon(Icons.play_arrow);
+      case 2:
+        return Icon(Icons.arrow_right, color: Colors.yellow);
+      default:
+        return Icon(Icons.arrow_right, color: Colors.green);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -4,8 +4,8 @@ import 'package:sqflite/sqlite_api.dart';
 import 'package:path/path.dart';
 
 class DatabaseHelper {
-  static DatabaseHelper _databaseHelper;
-  static Database _database;
+  static DatabaseHelper? _databaseHelper;
+  static Database? _database;
 
   String noteTable = 'note_table';
   String colId = 'id';
@@ -19,13 +19,13 @@ class DatabaseHelper {
     if (_databaseHelper == null) {
       _databaseHelper = DatabaseHelper._createInstance();
     }
-    return _databaseHelper;
+    return _databaseHelper!;
   }
   Future<Database> get database async {
     if (database == null) {
       _database = await _initalizeDatabase();
     }
-    return _database;
+    return _database!;
   }
 
   Future<Database> _initalizeDatabase() async {
